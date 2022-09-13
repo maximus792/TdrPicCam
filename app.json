@@ -2,9 +2,16 @@
   "expo": {
     "name": "TdRPicCam",
     "slug": "TdRPicCam",
-    "version": "1.0.0",
+    "icon": "./portrait.png",
+    "orientation": "portrait",
+    "version": "0.9.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "9db47bf4-8f84-42e7-b659-0030b6b6960d"
+      }
+    }
   }
 }
