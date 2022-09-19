@@ -12,6 +12,9 @@
       "eas": {
         "projectId": "9db47bf4-8f84-42e7-b659-0030b6b6960d"
       }
+    },
+    "android": {
+      "package": "com.maximus792.TdRPicCam"
     }
   }
 }

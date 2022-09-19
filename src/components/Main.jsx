@@ -20,7 +20,7 @@ import Settings from "./Settings";
 import MoreInfo from "./MoreInfo";
 import Index from "./Index";
 
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons,Ionicons  } from "@expo/vector-icons";
 
 const Main = () => {
  
@@ -51,10 +51,18 @@ const Main = () => {
             headerTitle: "PicCam",
             headerLargeTitle: true,
             headerRight: () => (
-              <TouchableOpacity
+              <View style={{flexDirection:"row"}}>
+                <TouchableOpacity
+                onPress={() => navigation.navigate("Index",{reload: true})}
+                color="#fff"
+                style={{marginHorizontal:10}}
+              ><Ionicons name="ios-reload" size={24} color="black" /></TouchableOpacity>
+                <TouchableOpacity
                 onPress={() => navigation.navigate("Settings",{hi:"hi"})}
                 color="#fff"
+                style={{marginHorizontal:10}}
               ><MaterialIcons name="settings" size={24} color="black" /></TouchableOpacity>
+              </View>
             ),
           })}
         />

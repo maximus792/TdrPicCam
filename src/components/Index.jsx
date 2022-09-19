@@ -16,6 +16,10 @@ import theme from "../theme";
 import TopBar from "./TopBar";
 
 const Index = ({ navigation, route }) => {
+
+  if((route.params))
+    if(route.params.reload)
+      navigation.navigate("Home");
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
