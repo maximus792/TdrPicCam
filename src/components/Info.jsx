@@ -5,7 +5,7 @@ import theme from "../theme";
 
 
 const Info = ({styles, angle, latitude,longitude,altitude,radius}) => {
- 
+
   return (
     <View style={styles}>
       <Text>Latitude: {latitude === undefined ? "..." : latitude}</Text>

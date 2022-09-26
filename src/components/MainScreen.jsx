@@ -22,6 +22,7 @@ const MainScreen = ({ navigation }) => {
   const [altitude, setAltitude] = useState();
   const [all, setall] = useState(false);
   const [angle, setangle] = useState(0);
+  const [settings, setsettings] = useState();
 
   var angleDef = 0;
   Magnetometer.setUpdateInterval(60);
@@ -40,7 +41,7 @@ const MainScreen = ({ navigation }) => {
             )
         );
       }
-      console.log();
+      
       if (Math.abs(angleDef - a) >= 4) {
         angleDef = a;
         setangle(angleDef);
@@ -53,6 +54,7 @@ const MainScreen = ({ navigation }) => {
       setAltitude(location.coords.altitude);
     });
   }, []);
+
 
   return (
     <View style={styles.container}>
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
   container: {
     //paddingTop: Constants.statusBarHeight,
     flex: 1,
-    backgroundColor: theme.colors.secondary,
+    backgroundColor: theme.colors.bgcolor,
   },
   button: {
     alignItems: "center",

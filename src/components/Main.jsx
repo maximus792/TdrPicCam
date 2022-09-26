@@ -30,8 +30,9 @@ const Main = () => {
     <NavigationContainer>
       <Stack.Navigator
       screenOptions={{headerStyle: {
-        backgroundColor: "#788585",
-      },}}>
+        backgroundColor: theme.colors.header,
+        color: "#fff"
+      },headerTintColor:"#fff"}}>
       <Stack.Screen
           name="Index"
           component={Index}
@@ -69,10 +70,13 @@ const Main = () => {
         <Stack.Screen
           name="Settings"
           component={Settings}
-          options={{
-            animationEnabled: false,
+          options={({navigation})=>({
             unmountOnBlur: true,
-          }}
+            animationEnabled: false,
+            headerTitle: "Settings",
+            headerLargeTitle: true,
+           
+          })}
         />
         <Stack.Screen
           name="MoreInfo"
@@ -101,7 +105,7 @@ const Main = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.secondary,
+    backgroundColor: theme.colors.bgcolor,
   },
   input: {
     marginTop: 10,

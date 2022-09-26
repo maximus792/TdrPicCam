@@ -46,9 +46,6 @@ const MoreInfo = ({ navigation, route }) => {
 
   const getDescription = (title) => {
     var info = title.split(":");
-    /*  info[0] = "ca";
-    info[1] = "Tossal de la Caperutxa"; */
-    /* https://ca.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&titles=Tossal de la Caperutxa */
     fetch(
       `https://${info[0]}.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&titles=${info[1]}`
     )
@@ -66,11 +63,11 @@ const MoreInfo = ({ navigation, route }) => {
             .replace("</h2>", "")
             .replace("<span>", "")
             .replace("</span>", "");
-            console.log(replaced);
           if(replaced[0] === "<" && replaced[1] === "!" && replaced[2] === "-" && replaced[3] === "-")
             {setDescription(null);
               setcharged(true)
             return 0;}
+
           var write = true;
           var span = false;
           var final = "";
@@ -80,6 +77,7 @@ const MoreInfo = ({ navigation, route }) => {
             if (write) final += replaced[i];
             if (replaced[i] === ">" && !span) {write = true; if(replaced[i-1]==="n" || replaced[i-1] === "i") span = false}
           }
+
           setDescription(final);
           setcharged(true);
         } else {
@@ -142,7 +140,7 @@ const MoreInfo = ({ navigation, route }) => {
         <Text style={styles.title}>{getType(value.tags)}{" "}{value.tags.name}</Text>
       </View>
 
-      <ScrollView>
+      <ScrollView style={{width:"100%"}}>
         <View
           style={{
             justifyContent: "space-around",
@@ -191,7 +189,7 @@ const MoreInfo = ({ navigation, route }) => {
             </View>
           )}
         </View>
-        {/* <MapView
+        <MapView
           style={styles.map}
           initialRegion={{
             latitude: value.lat,
@@ -199,12 +197,18 @@ const MoreInfo = ({ navigation, route }) => {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
+          showsUserLocation={true}
+      showsMyLocationButton={true}
+      showsCompass={true}
+      pitchEnabled={true}
+      rotateEnabled={true}
+      scrollEnabled={true}
         >
           <Marker
             coordinate={{ latitude: value.lat, longitude: value.lon }}
             title={value.tags.name}
           />
-        </MapView> */}
+        </MapView>
       </ScrollView>
     </View>
   );
@@ -214,7 +218,7 @@ const styles = StyleSheet.create({
   container: {
     //paddingTop: Constants.statusBarHeight,
     flex: 1,
-    backgroundColor: theme.colors.secondary,
+    backgroundColor: theme.colors.bgcolor,
   },
   title: {
     fontSize: 25,
@@ -224,9 +228,11 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   map: {
-    width: 300,
-    height: 300,
+    width: Dimensions.get("window").width -15,
+    height: Dimensions.get("window").width -15,
     borderRadius: 10,
+    margin: 15,
+    alignSelf: "center"
   },
   header: {
     flexDirection: "row",

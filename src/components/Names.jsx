@@ -24,6 +24,8 @@ import {
   Ionicons,
 } from "@expo/vector-icons";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 class Names extends React.Component {
   state = {
     data: null,
@@ -33,15 +35,27 @@ class Names extends React.Component {
     charged: false,
     show: false,
     errorCount: 0,
+    selectedItems : []
   };
   componentDidMount() {
     this.setState({ errorCount: 0 });
     this.loadData();
+    this.getData().then((val) => {
+      this.setState({radius:(parseInt(val.radius)), selectedItems:(val.selectedItems)})
+    })
   }
-
+  getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("@Settings");
+      console.log(jsonValue);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      console.log(e);
+    }
+  };
   loadData() {
     if (!this.state.charged && !this.state.data)
-      Provider(this.props.latitude, this.props.longitude, this.state.radius)
+      Provider(this.props.latitude, this.props.longitude, this.state.radius, this.state.selectedItems)
         .then((data) => {
           data.elements.map((value, index) => {
             data.elements[index].angle = this.angleWithMountain(

@@ -16,35 +16,48 @@ import { Camera, CameraType } from "expo-camera";
 import Info from "./Info";
 import Names from "./Names";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const CameraComponent = ({
   latitude,
   longitude,
   altitude,
   angle,
   navigation,
-  allprop
+  allprop,
 }) => {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [all, setAll] = useState(allprop);
   const [radius, setRadius] = useState(15);
   const [loaded, setloaded] = useState(false);
+  const [cameraInfo, setcameraInfo] = useState(false);
 
-
-  
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("@Settings");
+      console.log("jsonValue");
+      console.log(jsonValue);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      console.log(e);
+    }
+  };
   useEffect(() => {
     navigation.addListener("focus", () => {
+      getData().then((val) => {
+        setRadius(parseInt(val.radius));
+        setcameraInfo(val.cameraInfo);
+      });
       setloaded(true);
     });
     navigation.addListener("blur", () => {
       setloaded(false);
     });
-
-
   }, []);
 
   if (!permission) {
     // Camera permissions are still loading
-    
+
     return <View />;
   }
 
@@ -65,8 +78,7 @@ const CameraComponent = ({
       {loaded && (
         <Camera style={styles.camera} type={CameraType.back} ratio="16:9">
           <View style={styles.mainContainer}>
-            <View style={styles.TopBar}>
-              
+            <View style={cameraInfo? styles.TopBar : {display:"none"}}>
               <Info
                 {...{
                   latitude,
