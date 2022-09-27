@@ -149,13 +149,64 @@ const MoreInfo = ({ navigation, route }) => {
             width: "100%",
           }}
         >
-          <Text style={[styles.NamesText, { padding: 10, marginTop: 10 }]}>
+          
+          
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              marginVertical: 10,
+              width: Dimensions.get("window").width - 10,
+              backgroundColor: "#ccc",
+              borderRadius: 10,
+              marginTop: 60,
+              alignSelf:"center"
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                marginRight: 10,
+                position: "absolute",
+                top: -35,
+                left: 10,
+                backgroundColor: "#e6e6e6",
+                padding: 5,
+                paddingHorizontal: 10,
+                borderRadius: 10,
+                zIndex: -2,
+                height: 35,
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
+                color: "#1fb28a",
+              }}
+            >
+              INFO
+            </Text>
+
+            <View
+              style={{
+                flexDirection: "column",
+                flex: 1,
+                zIndex: 2,
+                paddingVertical: 15,
+                minWidth: 50,
+                marginHorizontal: 10,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={[styles.NamesText, { padding: 10, marginTop: 10 }]}>
             <Ionicons name="ios-compass" size={22} color="#424242" />{" "}
             {value.lat}, {value.lon}
           </Text>
           <Text style={[{ padding: 10 }, styles.NamesText]}>
           <FontAwesome5 name="arrow-up" size={20} color="black" />{" "}
-            {value.tags.ele}m
+            {value.tags.ele} m
           </Text>
           
           <Text style={[{ padding: 10 }, styles.NamesText]}>
@@ -164,11 +215,69 @@ const MoreInfo = ({ navigation, route }) => {
               size={22}
               color="#424242"
             />{" "}
-            {value.distance.toFixed(2)}km
+            {value.distance.toFixed(2)} km
           </Text>
-          
-          {description ? (
-            <Text style={[{ padding: 10 }, styles.NamesText]}>
+              </View>
+
+              
+
+            </View>
+          </View>
+
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              marginVertical: 10,
+              width: Dimensions.get("window").width - 10,
+              backgroundColor: "#ccc",
+              padding: 10,
+              borderRadius: 10,
+              marginTop: 40,
+              alignSelf:"center"
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                marginRight: 10,
+                position: "absolute",
+                top: -35,
+                left: 10,
+                backgroundColor: "#e6e6e6",
+                padding: 5,
+                paddingHorizontal: 10,
+                borderRadius: 10,
+                zIndex: -2,
+                height: 35,
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
+                color: "#1fb28a",
+              }}
+            >
+              About
+            </Text>
+
+            <View
+              style={{
+                flexDirection: "column",
+                flex: 1,
+                zIndex: 2,
+                paddingVertical: 15,
+                minWidth: 50,
+                marginHorizontal: 10,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                {description ? (
+            <Text style={[{ padding: 0 }, styles.NamesText]}>
               {description}
             </Text>
           ) : (
@@ -188,7 +297,36 @@ const MoreInfo = ({ navigation, route }) => {
               </Text>
             </View>
           )}
+              </View>
+
+              
+
+            </View>
+          </View>
+          
         </View>
+
+        <View style={{marginTop:20}}>
+        <Text
+              style={{
+                fontSize: 20,
+                marginRight: 10,
+                position: "absolute",
+                top: -15,
+                left: 15,
+                backgroundColor: "#e6e6e6",
+                padding: 5,
+                paddingHorizontal: 10,
+                borderRadius: 10,
+                zIndex: -2,
+                height: 35,
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
+                color: "#1fb28a",
+              }}
+            >
+              MAP
+            </Text>
         <MapView
           style={styles.map}
           initialRegion={{
@@ -209,6 +347,7 @@ const MoreInfo = ({ navigation, route }) => {
             title={value.tags.name}
           />
         </MapView>
+        </View>
       </ScrollView>
     </View>
   );
@@ -228,8 +367,10 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   map: {
-    width: Dimensions.get("window").width -15,
-    height: Dimensions.get("window").width -15,
+    //width: Dimensions.get("window").width -15,
+    //height: Dimensions.get("window").width -15,
+    width: Dimensions.get("window").width -20,
+    height: Dimensions.get("window").width /2 + 70,
     borderRadius: 10,
     margin: 15,
     alignSelf: "center"

@@ -17,9 +17,9 @@ import {
 import Slider from "@react-native-community/slider";
 import Constants from "expo-constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ColorPicker } from "react-native-color-picker";
 
 import { AntDesign } from "@expo/vector-icons";
+import theme from "../theme";
 
 const Settings = ({ navigation, route }) => {
   const [settings, setsettings] = useState(null);
@@ -294,7 +294,7 @@ const Settings = ({ navigation, route }) => {
                   justifyContent: "space-between",
                 }}
               >
-                <Text>CAMERA INFO: </Text>
+                <Text>CAMERA INFO </Text>
                 <Switch
                   trackColor={{ false: "#767577", true: "#7de8cb" }}
                   thumbColor={cameraInfo ? "#1b9876" : "#f4f3f4"}
@@ -303,10 +303,49 @@ const Settings = ({ navigation, route }) => {
                   onValueChange={() => setcameraInfo(!cameraInfo)}
                 />
               </View>
-              <ColorPicker
-                onColorSelected={(color) => alert(`Color selected: ${color}`)}
-                style={{ flex: 1 }}
-              />
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginTop:10,
+                }}
+              >
+                <Text>BACKGROUND COLOR </Text>
+                <View
+                  style={{
+                    
+                    width: 20,
+                    height: 30,
+                    paddingHorizontal: 20,
+                    borderWidth: 1,
+                    backgroundColor: theme.colors.bgcolor,
+                  }}
+                ></View>
+              </View>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginTop:10,
+                }}
+              >
+                <Text>NAVBAR COLOR </Text>
+                <View
+                  style={{
+                    
+                    width: 20,
+                    height: 30,
+                    paddingHorizontal: 20,
+                    borderWidth: 1,
+                    backgroundColor: theme.colors.header,
+                  }}
+                ></View>
+              </View>
+
             </View>
           </View>
         </View>

@@ -57,12 +57,12 @@ const Main = () => {
                 onPress={() => navigation.navigate("Index",{reload: true})}
                 color="#fff"
                 style={{marginHorizontal:10}}
-              ><Ionicons name="ios-reload" size={24} color="black" /></TouchableOpacity>
+              ><Ionicons name="ios-reload" size={24} color="#eeeeee" /></TouchableOpacity>
                 <TouchableOpacity
                 onPress={() => navigation.navigate("Settings",{hi:"hi"})}
                 color="#fff"
                 style={{marginHorizontal:10}}
-              ><MaterialIcons name="settings" size={24} color="black" /></TouchableOpacity>
+              ><MaterialIcons name="settings" size={24} color="#eeeeee" /></TouchableOpacity>
               </View>
             ),
           })}
@@ -90,7 +90,7 @@ const Main = () => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("Settings",{hi:"hi"})}
                 color="#fff"
-              ><MaterialIcons name="settings" size={24} color="black" /></TouchableOpacity>
+              ><MaterialIcons name="settings" size={24} color="#eeeeee" /></TouchableOpacity>
             ),
           })}
         />
