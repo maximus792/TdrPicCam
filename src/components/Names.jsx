@@ -44,17 +44,31 @@ class Names extends React.Component {
       this.setState({radius:(parseInt(val.radius)), selectedItems:(val.selectedItems)})
     })
   }
-  getData = async () => {
+  getData = async (key="@Settings") => {
     try {
-      const jsonValue = await AsyncStorage.getItem("@Settings");
-      console.log(jsonValue);
+      const jsonValue = await AsyncStorage.getItem(key);
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       console.log(e);
     }
   };
+  storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem("@data", jsonValue);
+    } catch (e) {
+      // saving error
+
+    }
+  };
   loadData() {
-    if (!this.state.charged && !this.state.data)
+    this.getData("@data").then((dataget)=>{
+     console.log(dataget);
+     if(dataget.elements.length>0){
+      this.setState({ data: dataget, charged: true });
+    return;}
+     else{
+      if (!this.state.charged && !this.state.data)
       Provider(this.props.latitude, this.props.longitude, this.state.radius, this.state.selectedItems)
         .then((data) => {
           data.elements.map((value, index) => {
@@ -72,6 +86,7 @@ class Names extends React.Component {
               this.angleWithMountainElevation(value.tags.ele, value.distance);
           });
           this.setState({ data: data, charged: true });
+          this.storeData(data)
         })
         .catch((e) => {
           console.log(e);
@@ -97,6 +112,9 @@ class Names extends React.Component {
             );
           else this.loadData();
         });
+     }
+    })
+    
   }
   getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     var R = 6371; // Radius of the earth in km
@@ -146,7 +164,7 @@ class Names extends React.Component {
       this.setState({ angle: this.props.angle }); */
     var items = [];
     this.state.data.elements.map((value) => {
-      if (!value.tags.name || value.distance > this.state.radius) return;
+      if (!value.tags.name || value.distance > this.state.radius || !value.tags.ele) return;
       if (
         Math.abs(angle - value.angle) < angleOfVision ||
         this.state.all

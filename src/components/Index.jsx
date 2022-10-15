@@ -16,10 +16,16 @@ import theme from "../theme";
 import TopBar from "./TopBar";
 
 const Index = ({ navigation, route }) => {
-
-  if((route.params))
-    if(route.params.reload)
-      navigation.navigate("Home");
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem("@data", jsonValue);
+    } catch (e) {
+      // saving error
+    }
+  };
+  storeData({});
+  if (route.params) if (route.params.reload) navigation.navigate("Home");
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback

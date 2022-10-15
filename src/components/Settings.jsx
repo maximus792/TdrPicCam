@@ -34,6 +34,7 @@ const Settings = ({ navigation, route }) => {
       await AsyncStorage.setItem("@Settings", jsonValue);
     } catch (e) {
       // saving error
+
     }
   };
 
@@ -44,6 +45,7 @@ const Settings = ({ navigation, route }) => {
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       // error reading value
+      storeData({"radius":15,"selectedItems":["peak"],"cameraInfo":false})
     }
   };
   useEffect(() => {
@@ -212,8 +214,9 @@ const Settings = ({ navigation, route }) => {
                 "saddle",
                 "waterfall",
                 "wilderness hut",
-              ].map((value) => (
+              ].map((value,key) => (
                 <View
+                key={key}
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
