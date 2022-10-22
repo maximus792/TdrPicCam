@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import {
   Text,
   Dimensions,
@@ -35,16 +35,19 @@ class Names extends React.Component {
     charged: false,
     show: false,
     errorCount: 0,
-    selectedItems : []
+    selectedItems: [],
   };
   componentDidMount() {
     this.setState({ errorCount: 0 });
     this.loadData();
     this.getData().then((val) => {
-      this.setState({radius:(parseInt(val.radius)), selectedItems:(val.selectedItems)})
-    })
+      this.setState({
+        radius: parseInt(val.radius),
+        selectedItems: val.selectedItems,
+      });
+    });
   }
-  getData = async (key="@Settings") => {
+  getData = async (key = "@Settings") => {
     try {
       const jsonValue = await AsyncStorage.getItem(key);
       return jsonValue != null ? JSON.parse(jsonValue) : null;
@@ -58,63 +61,69 @@ class Names extends React.Component {
       await AsyncStorage.setItem("@data", jsonValue);
     } catch (e) {
       // saving error
-
     }
   };
   loadData() {
-    this.getData("@data").then((dataget)=>{
-     console.log(dataget);
-     if(dataget.elements.length>0){
-      this.setState({ data: dataget, charged: true });
-    return;}
-     else{
-      if (!this.state.charged && !this.state.data)
-      Provider(this.props.latitude, this.props.longitude, this.state.radius, this.state.selectedItems)
-        .then((data) => {
-          data.elements.map((value, index) => {
-            data.elements[index].angle = this.angleWithMountain(
-              value.lat,
-              value.lon
-            );
-            data.elements[index].distance = this.getDistanceFromLatLonInKm(
-              this.props.latitude,
-              this.props.longitude,
-              value.lat,
-              value.lon
-            );
-            data.elements[index].angleWithMountainElevation =
-              this.angleWithMountainElevation(value.tags.ele, value.distance);
-          });
-          this.setState({ data: data, charged: true });
-          this.storeData(data)
-        })
-        .catch((e) => {
-          console.log(e);
-          this.setState({ errorCount: this.state.errorCount++ });
-          if (this.state.errorCount >= 1)
-            Alert.alert(
-              "Error when fetching Data",
-              "Please if error continues restart the app or connect to the internet",
-              [
-                {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",
-                },
-                {
-                  text: "Retry",
-                  onPress: () => {
-                    this.setState({ errorCount: 0 });
-                    this.loadData();
-                  },
-                },
-              ]
-            );
-          else this.loadData();
-        });
-     }
-    })
-    
+    this.getData("@data").then((dataget) => {
+      if (dataget) {
+        this.setState({ data: dataget, charged: true });
+        return;
+      } else {
+        console.log("RELOADED");
+        if (!this.state.charged && !this.state.data)
+          Provider(
+            this.props.latitude,
+            this.props.longitude,
+            this.state.radius,
+            this.state.selectedItems
+          )
+            .then((data) => {
+              data.elements.map((value, index) => {
+                data.elements[index].angle = this.angleWithMountain(
+                  value.lat,
+                  value.lon
+                );
+                data.elements[index].distance = this.getDistanceFromLatLonInKm(
+                  this.props.latitude,
+                  this.props.longitude,
+                  value.lat,
+                  value.lon
+                );
+                data.elements[index].angleWithMountainElevation =
+                  this.angleWithMountainElevation(
+                    value.tags.ele,
+                    value.distance
+                  );
+              });
+              this.setState({ data: data, charged: true });
+              this.storeData(data);
+            })
+            .catch((e) => {
+              console.log(e);
+              this.setState({ errorCount: this.state.errorCount++ });
+              if (this.state.errorCount >= 1)
+                Alert.alert(
+                  "Error when fetching Data",
+                  "Please if error continues restart the app or connect to the internet",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    {
+                      text: "Retry",
+                      onPress: () => {
+                        this.setState({ errorCount: 0 });
+                        this.loadData();
+                      },
+                    },
+                  ]
+                );
+              else this.loadData();
+            });
+      }
+    });
   }
   getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     var R = 6371; // Radius of the earth in km
@@ -158,20 +167,47 @@ class Names extends React.Component {
 
   calcView() {
     var angleOfVision = 10;
-    var angle = this.props.angle
+    var angle = this.props.angle;
     //if (this.state.radius > 10 && this.state.radius <= 20) angleOfVision = 15;
     /* if (Math.abs(this.props.angle - this.state.angle) >= 4)
       this.setState({ angle: this.props.angle }); */
+
+    var items = {};
+    for (let elem of this.state.data.elements) {
+      if (
+        !(
+          !elem.tags.name ||
+          elem.distance > this.state.radius ||
+          !elem.tags.ele
+        )
+      )
+        if (Math.abs(angle - elem.angle) < angleOfVision || this.state.all)
+          if (items.mountain == undefined) items = { mountain: elem };
+          else if (
+            elem.angleWithMountainElevation >=
+            items.mountain.angleWithMountainElevation
+          )
+            items.mountain = elem;
+    }
+    if (items.mountain == undefined) return null;
+    else;
+    return [items.mountain];
+
+    /*
     var items = [];
-    this.state.data.elements.map((value) => {
+     this.state.data.elements.map((value) => {
       if (!value.tags.name || value.distance > this.state.radius || !value.tags.ele) return;
       if (
         Math.abs(angle - value.angle) < angleOfVision ||
         this.state.all
       )
+      
+
         items.push(value);
-    });
+        
+    }); 
     return items ;
+    */
   }
   dynamicSort(property) {
     var sortOrder = 1;
@@ -187,7 +223,6 @@ class Names extends React.Component {
   }
 
   render() {
-    
     if (!this.state.charged) {
       return (
         <ActivityIndicator
@@ -204,6 +239,8 @@ class Names extends React.Component {
       this.setState({ radius: this.props.radius, charged: false });
       this.loadData();
     }
+    if (this.calcView() != null)
+    
     return (
       <SafeAreaView
         style={this.state.all ? { paddingBottom: 0 } : { paddingBottom: 5 }}

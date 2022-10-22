@@ -1,12 +1,11 @@
 const Provider = async (latitude, longitude, area, selectedItems) => {
   constant = 1 / 110.574;
-  console.log(this.latitude);
-  console.log("provider");
+  /* console.log("provider");
   console.log(
     `${area * constant + latitude},${longitude - area * constant},${
       latitude - area * constant
     },${area * constant + longitude})`
-  );
+  ); */
   var obj = {};
   var nodes = []
   var around = `${
@@ -27,7 +26,7 @@ const Provider = async (latitude, longitude, area, selectedItems) => {
     .then((response) => response.json())
     .then((data) => {
       obj = data;
-      console.log(obj);
+      //console.log(obj);
     })
     .catch((error) => {
       console.log(error);

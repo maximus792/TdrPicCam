@@ -21,6 +21,7 @@
     "@react-navigation/native": "^6.0.12",
     "@react-navigation/native-stack": "^6.8.0",
     "babel-plugin-macros": "^3.1.0",
+    "deprecated-react-native-prop-types": "^2.3.0",
     "expo": "~46.0.9",
     "expo-camera": "~12.3.0",
     "expo-linking": "~3.2.2",

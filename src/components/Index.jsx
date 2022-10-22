@@ -16,21 +16,27 @@ import theme from "../theme";
 import TopBar from "./TopBar";
 
 const Index = ({ navigation, route }) => {
-  const storeData = async (value) => {
+  const restoreData = async () => {
     try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem("@data", jsonValue);
+      await AsyncStorage.removeItem("@data");
     } catch (e) {
       // saving error
+
     }
   };
-  storeData({});
-  if (route.params) if (route.params.reload) navigation.navigate("Home");
+
+  restoreData().then(()=>{
+
+    if (route.params?.reload) navigation.navigate("Home");
+  })
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
         onPress={() => {
-          navigation.navigate("Home");
+          restoreData().then(()=>{
+
+            navigation.navigate("Home");
+          })
         }}
       >
         <Text style={styles.button}>PicCam</Text>

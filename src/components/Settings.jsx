@@ -13,10 +13,12 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Pressable,
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import Constants from "expo-constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome } from "@expo/vector-icons";
 
 import { AntDesign } from "@expo/vector-icons";
 import theme from "../theme";
@@ -34,7 +36,13 @@ const Settings = ({ navigation, route }) => {
       await AsyncStorage.setItem("@Settings", jsonValue);
     } catch (e) {
       // saving error
-
+    }
+  };
+  const restoreData = async () => {
+    try {
+      await AsyncStorage.removeItem("@data");
+    } catch (e) {
+      // saving error
     }
   };
 
@@ -45,9 +53,22 @@ const Settings = ({ navigation, route }) => {
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       // error reading value
-      storeData({"radius":15,"selectedItems":["peak"],"cameraInfo":false})
+      storeData({ radius: 15, selectedItems: ["peak"], cameraInfo: false });
     }
   };
+
+  /*   useEffect(() => {
+    // Use `setOptions` to update the button that we previously specified
+    // Now the button includes an `onPress` handler to update the count
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable  onPress={Save} style={{justifyContent:"center",alignItems:"center"}} >
+          <FontAwesome name="save" size={26} color="#eeeeee" />
+        </Pressable>
+      ),
+    });
+  }, [navigation]); */
+
   useEffect(() => {
     getData().then((val) => {
       setsettings(val);
@@ -56,7 +77,23 @@ const Settings = ({ navigation, route }) => {
       setcameraInfo(val.cameraInfo);
     });
   }, []);
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable
+          onPress={() => {
+            Save();
+          }}
+          style={{ justifyContent: "center", alignItems: "center" }}
+        >
+          <FontAwesome name="save" size={26} color="#eeeeee" />
+        </Pressable>
+      ),
+    });
+  }, [navigation,radius, selectedItems, cameraInfo]);
+
   const Save = () => {
+    console.log(radius);
     if (selectedItems.length == 0)
       Alert.alert(
         "Error when Saving",
@@ -72,7 +109,9 @@ const Settings = ({ navigation, route }) => {
       );
     else {
       storeData({ radius, selectedItems, cameraInfo });
-      navigation.goBack();
+      restoreData().then(() => {
+        navigation.goBack();
+      });
       console.log("Saved");
     }
   };
@@ -152,13 +191,13 @@ const Settings = ({ navigation, route }) => {
               <Slider
                 step={5}
                 minimumValue={5}
-                maximumValue={25}
+                maximumValue={200}
                 value={settings.radius}
                 style={{ width: "85%" }}
                 onValueChange={(slideValue) => setradius(slideValue)}
-                minimumTrackTintColor="#1fb28a"
+                minimumTrackTintColor="#9dccaf"
                 maximumTrackTintColor="#d3d3d3"
-                thumbTintColor="#b9e4c9"
+                thumbTintColor="#1fb28a"
               />
               <Text>{radius} km</Text>
             </View>
@@ -214,9 +253,9 @@ const Settings = ({ navigation, route }) => {
                 "saddle",
                 "waterfall",
                 "wilderness hut",
-              ].map((value,key) => (
+              ].map((value, key) => (
                 <View
-                key={key}
+                  key={key}
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
@@ -312,13 +351,12 @@ const Settings = ({ navigation, route }) => {
                   flexDirection: "row",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  marginTop:10,
+                  marginTop: 10,
                 }}
               >
                 <Text>BACKGROUND COLOR </Text>
                 <View
                   style={{
-                    
                     width: 20,
                     height: 30,
                     paddingHorizontal: 20,
@@ -333,13 +371,12 @@ const Settings = ({ navigation, route }) => {
                   flexDirection: "row",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  marginTop:10,
+                  marginTop: 10,
                 }}
               >
                 <Text>NAVBAR COLOR </Text>
                 <View
                   style={{
-                    
                     width: 20,
                     height: 30,
                     paddingHorizontal: 20,
@@ -348,54 +385,8 @@ const Settings = ({ navigation, route }) => {
                   }}
                 ></View>
               </View>
-
             </View>
           </View>
-        </View>
-        <View
-          style={{
-            alignSelf: "flex-end",
-            marginBottom: 20,
-            flexDirection: "row",
-          }}
-        >
-          <TouchableOpacity onPress={Save}>
-            <Text
-              style={{
-                fontSize: 20,
-                color: "#0b4133",
-                fontWeight: "bold",
-                fontFamily: "sans-serif",
-                padding: 10,
-                paddingHorizontal: 25,
-                backgroundColor: "#66e5c3",
-                margin: 5,
-              }}
-            >
-              Save
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 20,
-                color: "black",
-                fontWeight: "bold",
-                fontFamily: "sans-serif",
-                padding: 10,
-                paddingHorizontal: 25,
-                backgroundColor: "#ff5c33",
-                margin: 5,
-                marginRight: 0,
-              }}
-            >
-              Cancel
-            </Text>
-          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

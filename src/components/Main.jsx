@@ -7,6 +7,7 @@ import {
   Button,
   FlatList,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import Constants from "expo-constants";
 import theme from "../theme";
@@ -75,6 +76,10 @@ const Main = () => {
             animationEnabled: false,
             headerTitle: "Settings",
             headerLargeTitle: true,
+
+            headerRight: () => (
+              <Pressable title="Save" />
+            ),
            
           })}
         />

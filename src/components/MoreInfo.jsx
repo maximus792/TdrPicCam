@@ -45,6 +45,9 @@ const MoreInfo = ({ navigation, route }) => {
   };
 
   const getDescription = (title) => {
+    if(!title?.includes(":") || title  == undefined)
+      {setcharged(true)
+      return;}
     var info = title.split(":");
     fetch(
       `https://${info[0]}.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&titles=${info[1]}`
