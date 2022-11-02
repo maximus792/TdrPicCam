@@ -17,6 +17,7 @@ import Info from "./Info";
 import Names from "./Names";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome } from "@expo/vector-icons";
 
 const CameraComponent = ({
   latitude,
@@ -31,6 +32,7 @@ const CameraComponent = ({
   const [radius, setRadius] = useState(15);
   const [loaded, setloaded] = useState(false);
   const [cameraInfo, setcameraInfo] = useState(false);
+  const [crossbow, setcrossbow] = useState(true);
 
   const getData = async () => {
     try {
@@ -47,6 +49,7 @@ const CameraComponent = ({
       getData().then((val) => {
         setRadius(parseInt(val.radius));
         setcameraInfo(val.cameraInfo);
+        setcrossbow(val.crossbow)
       });
       setloaded(true);
     });
@@ -78,7 +81,7 @@ const CameraComponent = ({
       {loaded && (
         <Camera style={styles.camera} type={CameraType.back} ratio="16:9">
           <View style={styles.mainContainer}>
-            <View style={cameraInfo? styles.TopBar : {display:"none"}}>
+            <View style={cameraInfo ? styles.TopBar : { display: "none" }}>
               <Info
                 {...{
                   latitude,
@@ -89,6 +92,15 @@ const CameraComponent = ({
                   radius,
                 }}
               />
+            </View>
+            <View
+              style={crossbow?{
+                position: "absolute",
+                left: Dimensions.get("screen").width / 2 - 10,
+                height: Dimensions.get("screen").height / 2 + 70,
+              }:{display:"none"}}
+            >
+              <FontAwesome name="angle-double-down" size={50} color="#424242a3" />
             </View>
             <View>
               <Names

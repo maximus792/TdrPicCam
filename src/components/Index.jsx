@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -10,54 +10,193 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
   Dimensions,
+  ImageBackground,
 } from "react-native";
+
 import Constants from "expo-constants";
-import theme from "../theme";
-import TopBar from "./TopBar";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Entypo } from '@expo/vector-icons';
+import { MaterialIcons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
 
 const Index = ({ navigation, route }) => {
+  const [fontsLoaded] = useFonts({
+    "Trispace-Medium": require("../../assets/fonts/Trispace-Medium.ttf"),
+    "Trispace-SemiBold": require("../../assets/fonts/Trispace-SemiBold.ttf"),
+  });
   const restoreData = async () => {
     try {
       await AsyncStorage.removeItem("@data");
     } catch (e) {
       // saving error
-
     }
   };
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
 
-  restoreData().then(()=>{
-
+  if (!fontsLoaded) {
+    return null;
+  }
+  restoreData().then(() => {
     if (route.params?.reload) navigation.navigate("Home");
-  })
+  });
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          restoreData().then(()=>{
-
+      <ImageBackground
+        source={require("../images/background.jpg")}
+        style={styles.image}
+      >
+        {/* <Text style={{
+          fontSize: 40,
+          position: "absolute",
+          top: Constants.statusBarHeight +10,
+          color:"white",
+          alignSelf: "center"
+        }}>PicCam Application</Text> */}
+        <View
+          style={{
+            flex: 1,
+            position: "absolute",
+            top: Constants.statusBarHeight - 20,
+            alignSelf: "center",
+          }}
+        >
+          {/* <Image
+            source={require("../images/title.png")}
+            style={{
+              resizeMode: "contain",
+              width: Dimensions.get("window").width - 20,
+              alignSelf: "center",
+            }}
+          ></Image> */}
+        </View>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            restoreData().then(() => {
+              navigation.navigate("Home");
+            });
+          }}
+        >
+          <View
+            style={{
+              position: "absolute",
+              left: Dimensions.get("window").width / 2 - 20,
+              top: Dimensions.get("window").height / 3 +10,
+              alignItems: "center",
+            }}
+          >
+            {/* <Text
+              style={{
+                fontSize: 30,
+                color: "rgba(0,0,0,1)",
+                fontFamily: "Trispace-SemiBold",
+              }}
+            ><Entypo name="camera" size={35} color="black" /> 
+              START
+            </Text> */}
+            <FontAwesome5 name="map-marker-alt" size={50} color="rgba(0,0,0,.5)" />
+          </View>
+        </TouchableWithoutFeedback>
+        <View
+          style={{
+            position: "absolute",
+            bottom: 40,
+            //backgroundColor: "red",
+            height: Dimensions.get("window").height / 5,
+            width: Dimensions.get("window").width,
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <TouchableWithoutFeedback
+          onPress={() => {
             navigation.navigate("Home");
-          })
-        }}
-      >
-        <Text style={styles.button}>PicCam</Text>
-      </TouchableWithoutFeedback>
+          }}>
+          <View
+            style={{
+              //backgroundColor: "rgba(255, 255, 255, 0.4)",
+              padding: 10,
+              paddingVertical: 15,
+              borderRadius: 10,
+              width: Dimensions.get("window").width / 1.2,
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <FontAwesome5 name="search-location" size={40} color="white" />
+            <Text
+              style={{
+                marginLeft: 5,
+                fontSize: 27,
+                color: "#fff",
+                fontFamily: "Trispace-Medium",
+              }}
+            >
+              PicCam 
+            </Text>
+          </View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              navigation.navigate("Settings");
+            }}
+          >
+            <View
+              style={{
+                //backgroundColor: "rgba(255, 255, 255, 0.4)",
+                padding: 15,
+                borderRadius: 10,
+                width: Dimensions.get("window").width / 1.2,
+                flexDirection: "row",
+              }}
+            >
+              <MaterialIcons name="settings" size={40} color="white" />
+              <Text
+                style={{
+                  marginLeft: 20,
+                  fontSize: 30,
+                  color: "#fff",
+                  fontFamily: "Trispace-Medium",
+                }}
+              >
+                Settings
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
 
-      <TouchableWithoutFeedback
-        onPress={() => {
-          //navigation.navigate("Home", {allprop:true});
-          console.log("Working on");
-        }}
-      >
-        <Text style={styles.buttonDesactivated}>PicCam ALL</Text>
-      </TouchableWithoutFeedback>
+        <View style={{ display: "none" }}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              restoreData().then(() => {
+                navigation.navigate("Home");
+              });
+            }}
+          >
+            <Text style={styles.button}>PicCam</Text>
+          </TouchableWithoutFeedback>
 
-      <TouchableWithoutFeedback
-        onPress={() => {
-          navigation.navigate("Settings");
-        }}
-      >
-        <Text style={styles.button}>Settings</Text>
-      </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              //navigation.navigate("Home", {allprop:true});
+              console.log("Working on");
+            }}
+          >
+            <Text style={styles.buttonDesactivated}>PicCam ALL</Text>
+          </TouchableWithoutFeedback>
+
+          <TouchableWithoutFeedback
+            onPress={() => {
+              navigation.navigate("Settings");
+            }}
+          >
+            <Text style={styles.button}>Settings</Text>
+          </TouchableWithoutFeedback>
+        </View>
+      </ImageBackground>
     </View>
   );
 };
@@ -67,8 +206,12 @@ const styles = StyleSheet.create({
     //paddingTop: Constants.statusBarHeight,
     flex: 1,
     justifyContent: "center",
-    backgroundColor: theme.colors.secondary,
-    paddingBottom: Dimensions.get("window").height / 5,
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
   },
   title: {
     fontSize: 25,

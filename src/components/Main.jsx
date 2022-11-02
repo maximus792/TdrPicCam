@@ -38,8 +38,7 @@ const Main = () => {
           name="Index"
           component={Index}
           options={{
-            
-            animationEnabled: false,
+            headerShown: false,
             unmountOnBlur: true,
             headerTitle: "PicCam",
           }}
@@ -49,8 +48,8 @@ const Main = () => {
           component={MainScreen}
           options={({navigation})=>({
             unmountOnBlur: true,
-            animationEnabled: false,
             headerTitle: "PicCam",
+            
             headerLargeTitle: true,
             headerRight: () => (
               <View style={{flexDirection:"row"}}>
@@ -73,7 +72,6 @@ const Main = () => {
           component={Settings}
           options={({navigation})=>({
             unmountOnBlur: true,
-            animationEnabled: false,
             headerTitle: "Settings",
             headerLargeTitle: true,
 
@@ -88,7 +86,6 @@ const Main = () => {
           component={MoreInfo}
           options={({navigation})=>({
             unmountOnBlur: true,
-            animationEnabled: false,
             headerTitle: "PicCam",
             headerLargeTitle: true,
             headerRight: () => (

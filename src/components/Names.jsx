@@ -253,7 +253,7 @@ class Names extends React.Component {
           getItem={(data, index) => {
             return data[index];
           }}
-          data={this.calcView().sort(this.dynamicSort("distance"))}
+          data={this.calcView()}
           renderItem={({ item, index }) => (
             <TouchableWithoutFeedback
               key={index}
@@ -273,6 +273,7 @@ class Names extends React.Component {
                     flexDirection: "column",
                     alignItems: "flex-start",
                     width: "100%",
+                    marginTop:20,
                   }}
                 >
                   <Text

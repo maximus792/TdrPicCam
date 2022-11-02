@@ -29,6 +29,7 @@ const Settings = ({ navigation, route }) => {
   const [selectedItems, setselectedItems] = useState(["peak", "reservoir"]);
   const [charging, setcharging] = useState(true);
   const [cameraInfo, setcameraInfo] = useState(false);
+  const [crossbow, setcrossbow] = useState(true);
 
   const storeData = async (value) => {
     try {
@@ -53,21 +54,9 @@ const Settings = ({ navigation, route }) => {
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       // error reading value
-      storeData({ radius: 15, selectedItems: ["peak"], cameraInfo: false });
+      storeData({ radius: 15, selectedItems: ["peak"], cameraInfo: false, setcrossbow:true });
     }
   };
-
-  /*   useEffect(() => {
-    // Use `setOptions` to update the button that we previously specified
-    // Now the button includes an `onPress` handler to update the count
-    navigation.setOptions({
-      headerRight: () => (
-        <Pressable  onPress={Save} style={{justifyContent:"center",alignItems:"center"}} >
-          <FontAwesome name="save" size={26} color="#eeeeee" />
-        </Pressable>
-      ),
-    });
-  }, [navigation]); */
 
   useEffect(() => {
     getData().then((val) => {
@@ -75,6 +64,7 @@ const Settings = ({ navigation, route }) => {
       setradius(val.radius);
       setselectedItems(val.selectedItems);
       setcameraInfo(val.cameraInfo);
+      setcrossbow(val.crossbow);
     });
   }, []);
   useEffect(() => {
@@ -90,7 +80,7 @@ const Settings = ({ navigation, route }) => {
         </Pressable>
       ),
     });
-  }, [navigation,radius, selectedItems, cameraInfo]);
+  }, [navigation,radius, selectedItems, cameraInfo, crossbow]);
 
   const Save = () => {
     console.log(radius);
@@ -108,7 +98,7 @@ const Settings = ({ navigation, route }) => {
         ]
       );
     else {
-      storeData({ radius, selectedItems, cameraInfo });
+      storeData({ radius, selectedItems, cameraInfo, crossbow });
       restoreData().then(() => {
         navigation.goBack();
       });
@@ -334,6 +324,7 @@ const Settings = ({ navigation, route }) => {
                   flexDirection: "row",
                   alignItems: "center",
                   justifyContent: "space-between",
+
                 }}
               >
                 <Text>CAMERA INFO </Text>
@@ -343,6 +334,24 @@ const Settings = ({ navigation, route }) => {
                   ios_backgroundColor="#3e3e3e"
                   value={cameraInfo}
                   onValueChange={() => setcameraInfo(!cameraInfo)}
+                />
+                </View>
+                <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  
+                }}
+              >
+
+                <Text>SHOW CROSSBOW </Text>
+                <Switch
+                  trackColor={{ false: "#767577", true: "#7de8cb" }}
+                  thumbColor={crossbow ? "#1b9876" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  value={crossbow}
+                  onValueChange={() => setcrossbow(!crossbow)}
                 />
               </View>
 
